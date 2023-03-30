@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Task
- * 
+ *
  * @property int $task_id
  * @property string $title
  * @property string $description
@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
 	protected $table = 'task';
-	protected $primaryKey = 'task_id';
 
 	protected $casts = [
 		'activityid' => 'int',
@@ -51,4 +50,9 @@ class Task extends Model
 		'created_by',
 		'creator_category'
 	];
+
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class);
+    }
 }

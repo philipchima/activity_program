@@ -7,11 +7,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class School
- * 
+ *
  * @property int $id
  * @property string $name
  * @property string $address
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class School extends Model
 {
+    use HasFactory;
 	protected $table = 'schools';
 
 	protected $casts = [
@@ -46,4 +48,9 @@ class School extends Model
 		'status',
 		'website'
 	];
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
 }

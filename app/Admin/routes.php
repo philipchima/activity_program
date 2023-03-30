@@ -14,6 +14,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('users', UserController::class);
     $router->resource('schools', SchoolController::class);
+    $router->resource('departments', DepartmentController::class);
     $router->resource('teachers', TeacherController::class);
     $router->resource('medals', MedalController::class);
     $router->resource('activities', ActivityController::class);

@@ -7,11 +7,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Teacher
- * 
+ *
  * @property string $firstname
  * @property string $lastname
  * @property string $address
@@ -25,10 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Teacher extends Model
+class Teacher extends Administrator // extends Administrator Model
 {
 	protected $table = 'teachers';
-	public $incrementing = false;
 
 	protected $casts = [
 		'schoolid' => 'int',
@@ -45,4 +45,9 @@ class Teacher extends Model
 		'schoolid',
 		'created_by'
 	];
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
 }

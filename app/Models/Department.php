@@ -7,11 +7,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Department
- * 
+ *
  * @property string $name
  * @property int $schoolid
  * @property int $totalnoofmedals
@@ -24,8 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Department extends Model
 {
+    use HasFactory;
 	protected $table = 'departments';
-	public $incrementing = false;
 
 	protected $casts = [
 		'schoolid' => 'int',
@@ -41,4 +42,24 @@ class Department extends Model
 		'status',
 		'created_by'
 	];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function medals()
+    {
+        return $this->hasMany(Medal::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
