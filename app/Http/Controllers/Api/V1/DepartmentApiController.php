@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Filters\V1\DepartmentFilter;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\DepartmentCollection;
+use App\Http\Resources\V1\DepartmentResource;
 use App\Models\Department;
 use Illuminate\Http\Request;
 
@@ -11,10 +14,22 @@ class DepartmentApiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // get all department
-        return Department::all();
+        $filter = new  DepartmentFilter();
+
+        // get query params follow URL:
+        // example -> /api/v1/users?departmentId[eq]=507&name[eq]=Cydney%20Rogahn
+        $queryItems = $filter->transform($request); // return [['column','operator','value']]
+
+        if(count($queryItems) == 0){
+            // get all users with paging
+            return new DepartmentCollection(Department::paginate());
+        }else{
+            // get all users with filter and paging
+            $departments = Department::where($queryItems)->paginate();
+            return new DepartmentCollection($departments->appends($request->query()));
+        }
     }
 
     /**
@@ -39,6 +54,7 @@ class DepartmentApiController extends Controller
     public function show(Department $department)
     {
         //
+        return new DepartmentResource($department);
     }
 
     /**

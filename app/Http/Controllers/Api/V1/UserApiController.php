@@ -5,16 +5,31 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\UserCollection;
+use App\Http\Resources\V1\UserResource;
+use App\Filters\V1\UserFilter;
 
 class UserApiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // get all users
-        return User::all();
+        $filter = new  UserFilter();
+
+        // get query params follow URL:
+        // example -> /api/v1/users?departmentId[eq]=507&name[eq]=Cydney%20Rogahn
+        $queryItems = $filter->transform($request); // return [['column','operator','value']]
+
+        if(count($queryItems) == 0){
+            // get all users with paging
+            return new UserCollection(User::paginate());
+        }else{
+            // get all users with filter and paging
+            $users = User::where($queryItems)->paginate();
+            return new UserCollection($users->appends($request->query()));
+        }
     }
 
     /**
@@ -38,7 +53,8 @@ class UserApiController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return new UserResource($user);
+        // return $user;
     }
 
     /**
