@@ -20,14 +20,14 @@ class DepartmentApiController extends Controller
 
         // get query params follow URL:
         // example -> /api/v1/users?departmentId[eq]=507&name[eq]=Cydney%20Rogahn
-        $queryItems = $filter->transform($request); // return [['column','operator','value']]
+        $filterItems = $filter->transform($request); // return [['column','operator','value']]
 
-        if(count($queryItems) == 0){
+        if(count($filterItems) == 0){
             // get all users with paging
             return new DepartmentCollection(Department::paginate());
         }else{
             // get all users with filter and paging
-            $departments = Department::where($queryItems)->paginate();
+            $departments = Department::where($filterItems)->paginate();
             return new DepartmentCollection($departments->appends($request->query()));
         }
     }

@@ -20,14 +20,14 @@ class UserApiController extends Controller
 
         // get query params follow URL:
         // example -> /api/v1/users?departmentId[eq]=507&name[eq]=Cydney%20Rogahn
-        $queryItems = $filter->transform($request); // return [['column','operator','value']]
+        $filterItems = $filter->transform($request); // return [['column','operator','value']]
 
-        if(count($queryItems) == 0){
+        if(count($filterItems) == 0){
             // get all users with paging
             return new UserCollection(User::paginate());
         }else{
             // get all users with filter and paging
-            $users = User::where($queryItems)->paginate();
+            $users = User::where($filterItems)->paginate();
             return new UserCollection($users->appends($request->query()));
         }
     }
